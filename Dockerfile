@@ -1,19 +1,20 @@
-FROM node:buster-slim
+FROM node:20
 
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV MODEL_URL='https://storage.googleapis.com/asclepius-model-bucket/model-in-prod/model.json'
+WORKDIR /usr/src/app
 
-COPY . .
+COPY package*.json ./
 
 RUN apt-get update && \
-    apt-get install -y build-essential \
-    wget \
-    python3 \
-    make \
-    gcc \
-    libc6-dev
+    apt-get install -y build-essential 
 
 RUN npm install
 
-CMD [ "npm", "run", "prod" ]
+COPY . .
+
+ENV NODE_ENV=production
+
+ENV PORT=3000
+
+ENV MODEL_URL='https://storage.googleapis.com/asclepius-model-bucket/model-in-prod/model.json'
+
+CMD [ "npm", "start" ]
